@@ -15,6 +15,7 @@ The configuration files for ansible currently assume the following hosts:
 	* 2 CPUs
 	* username: kubenode
 	* password: 12345678
+	* no password for sudo
 
 * VM 1:
 	* Ubuntu server 18.04 and later
@@ -25,3 +26,4 @@ The configuration files for ansible currently assume the following hosts:
 	* 2 CPUs
 	* username: kubenode
 	* password: 12345678
+	* no password for sudo
