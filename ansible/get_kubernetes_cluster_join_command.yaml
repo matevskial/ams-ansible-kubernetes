@@ -1,0 +1,26 @@
+---
+- name: Get kubernetes cluster join command
+  hosts: masters
+  gather_facts: yes
+  connection: ssh
+
+  tasks:
+    - name: Get the token for joining nodes to the cluster
+      shell: kubeadm token create --print-join-command
+      register: kubernetes_join_command
+
+    - debug:
+        msg: "{{ kubernetes_join_command.stdout }}"
+
+    - name: Create tmp folder to store temporary files
+      delegate_to: localhost
+      file:
+        path: tmp
+        state: directory
+
+    - name: Copy join command to local file.
+      delegate_to: localhost
+      copy:
+        content: "{{ kubernetes_join_command.stdout_lines[0] }}"
+        dest: tmp/kubernetes_join_command
+        mode: 0777
