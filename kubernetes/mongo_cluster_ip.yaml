@@ -1,0 +1,12 @@
+# Exposes a set of pods to other objects in the cluster
+apiVersion: v1
+kind: Service
+metadata:
+    name: test-mongo # hostname for the pods that are configured with this config
+spec:
+    type: ClusterIP
+    selector:
+        component: db
+    ports:
+        - port: 27017
+          targetPort: 27017

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: webapp-deployment
+spec:
+    replicas: 1 # number of different pods described with the template spec
+    selector:
+        matchLabels:
+            component: web
+    template: # configuration for every single pod that is configured by this Deployment
+        metadata:
+            labels:
+                component: web
+        spec:
+            containers:
+                - name: webapp
+                  image: express-project-docker
+                  imagePullPolicy: Never
+                  ports:
+                      - containerPort: 3000
