@@ -1,0 +1,5 @@
+[masters]
+master ansible_host=192.168.0.13 ansible_user=kubenode ansible_ssh_pass=12345678 ansible_port=22
+
+[workers]
+worker ansible_host=192.168.0.14 ansible_user=kubenode ansible_ssh_pass=12345678 ansible_port=22

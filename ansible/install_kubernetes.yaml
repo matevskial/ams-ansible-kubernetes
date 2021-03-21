@@ -1,0 +1,73 @@
+---
+- name: Install kubernetes on master and workers
+  hosts: [masters, workers]
+  remote_user: kubenode
+  become: yes
+  become_method: sudo
+  become_user: root
+  gather_facts: yes
+  connection: ssh
+
+  tasks:
+
+    - name: Disable  swap
+      command: swapoff -a
+
+    - name: Remove swap entry in fstab
+      lineinfile:
+        dest: /etc/fstab
+        regexp: swap
+        state: absent
+
+    - name: Install prerequisites
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Install docker
+      apt:
+        name:
+          - docker.io
+        state: present
+
+    - name: Enable Docker service
+      service:
+        name: docker
+        enabled: yes
+
+    - name: Add Google official GPG key
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+
+    - name: Add kubernetes repository
+      apt_repository:
+        repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+        state: present
+        filename: kubernetes
+        mode: 0600
+
+    - name: Install Kubernetes
+      apt:
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: present
+
+    - name: Enable Kubernetes service
+      service:
+        name: kubelet
+        enabled: yes
+
+    - name: Reboot
+      reboot:
+        post_reboot_delay: 10
+        reboot_timeout: 60
+        connect_timeout: 60
+        test_command: uptime
+     
