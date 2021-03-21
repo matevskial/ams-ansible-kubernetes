@@ -52,7 +52,7 @@
       become: yes
       command: "{{ item }}"
       with_items:
-        - kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+        - kubectl create -f https://docs.projectcalico.org/v3.14/manifests/calico.yaml
 
     - name: Get the token for joining nodes to the cluster
       shell: kubeadm token create --print-join-command
