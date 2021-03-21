@@ -1,0 +1,29 @@
+---
+- name: Install docker image
+  hosts: [masters, workers]
+  gather_facts: yes
+  connection: ssh
+
+  tasks:
+    - name: Install git if not installed
+      become_user: root
+      become_method: sudo
+      become: yes
+      apt:
+        name:
+          - git
+        state: present
+
+    - name: Clone the repository
+      become_user: kubenode
+      become_method: sudo
+      become: yes
+      git:
+        repo: 'https://gitlab.com/matevskial/express-project-docker/'
+        dest: 'express-project-docker'
+
+    - name: Build docker image
+      become_user: root
+      become_method: sudo
+      become: yes
+      command: docker build -t express-project-docker express-project-docker
